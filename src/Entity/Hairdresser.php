@@ -105,10 +105,17 @@ class Hairdresser
     #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'hairdresser', orphanRemoval: true)]
     private Collection $services;
 
+    /**
+     * @var Collection<int, OpeningHours>
+     */
+    #[ORM\OneToMany(targetEntity: OpeningHours::class, mappedBy: 'hairdresser', orphanRemoval: true)]
+    private Collection $openingHours;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->services = new ArrayCollection();
+        $this->openingHours = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -350,6 +357,36 @@ class Hairdresser
             // set the owning side to null (unless already changed)
             if ($service->getHairdresser() === $this) {
                 $service->setHairdresser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OpeningHours>
+     */
+    public function getOpeningHours(): Collection
+    {
+        return $this->openingHours;
+    }
+
+    public function addOpeningHour(OpeningHours $openingHour): static
+    {
+        if (!$this->openingHours->contains($openingHour)) {
+            $this->openingHours->add($openingHour);
+            $openingHour->setHairdresser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpeningHour(OpeningHours $openingHour): static
+    {
+        if ($this->openingHours->removeElement($openingHour)) {
+            // set the owning side to null (unless already changed)
+            if ($openingHour->getHairdresser() === $this) {
+                $openingHour->setHairdresser(null);
             }
         }
 
