@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HairdresserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -97,9 +99,16 @@ class Hairdresser
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Service>
+     */
+    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'hairdresser', orphanRemoval: true)]
+    private Collection $services;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->services = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -315,5 +324,35 @@ class Hairdresser
     public function __toString(): string
     {
         return (string) $this->name;
+    }
+
+    /**
+     * @return Collection<int, Service>
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): static
+    {
+        if (!$this->services->contains($service)) {
+            $this->services->add($service);
+            $service->setHairdresser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): static
+    {
+        if ($this->services->removeElement($service)) {
+            // set the owning side to null (unless already changed)
+            if ($service->getHairdresser() === $this) {
+                $service->setHairdresser(null);
+            }
+        }
+
+        return $this;
     }
 }
