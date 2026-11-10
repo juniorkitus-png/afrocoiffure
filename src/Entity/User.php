@@ -72,10 +72,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'author', orphanRemoval: true)]
     private Collection $reviews;
 
+    /**
+     * @var Collection<int, ContactRequest>
+     */
+    #[ORM\OneToMany(targetEntity: ContactRequest::class, mappedBy: 'sender')]
+    private Collection $contactRequests;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->reviews = new ArrayCollection();
+        $this->contactRequests = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -277,6 +284,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($review->getAuthor() === $this) {
                 $review->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContactRequest>
+     */
+    public function getContactRequests(): Collection
+    {
+        return $this->contactRequests;
+    }
+
+    public function addContactRequest(ContactRequest $contactRequest): static
+    {
+        if (!$this->contactRequests->contains($contactRequest)) {
+            $this->contactRequests->add($contactRequest);
+            $contactRequest->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactRequest(ContactRequest $contactRequest): static
+    {
+        if ($this->contactRequests->removeElement($contactRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($contactRequest->getSender() === $this) {
+                $contactRequest->setSender(null);
             }
         }
 

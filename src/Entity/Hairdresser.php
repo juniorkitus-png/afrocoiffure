@@ -123,6 +123,12 @@ class Hairdresser
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'hairdresser', orphanRemoval: true)]
     private Collection $reviews;
 
+    /**
+     * @var Collection<int, ContactRequest>
+     */
+    #[ORM\OneToMany(targetEntity: ContactRequest::class, mappedBy: 'hairdresser', orphanRemoval: true)]
+    private Collection $contactRequests;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -130,6 +136,7 @@ class Hairdresser
         $this->openingHours = new ArrayCollection();
         $this->portfolioPhotos = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->contactRequests = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -461,6 +468,36 @@ class Hairdresser
             // set the owning side to null (unless already changed)
             if ($review->getHairdresser() === $this) {
                 $review->setHairdresser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContactRequest>
+     */
+    public function getContactRequests(): Collection
+    {
+        return $this->contactRequests;
+    }
+
+    public function addContactRequest(ContactRequest $contactRequest): static
+    {
+        if (!$this->contactRequests->contains($contactRequest)) {
+            $this->contactRequests->add($contactRequest);
+            $contactRequest->setHairdresser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactRequest(ContactRequest $contactRequest): static
+    {
+        if ($this->contactRequests->removeElement($contactRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($contactRequest->getHairdresser() === $this) {
+                $contactRequest->setHairdresser(null);
             }
         }
 
