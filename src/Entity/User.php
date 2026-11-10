@@ -78,11 +78,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: ContactRequest::class, mappedBy: 'sender')]
     private Collection $contactRequests;
 
+    /**
+     * @var Collection<int, Hairdresser>
+     */
+    #[ORM\ManyToMany(targetEntity: Hairdresser::class, inversedBy: 'favoritedBy')]
+    #[ORM\JoinTable(name: 'user_favorite')]
+    private Collection $favorites;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->reviews = new ArrayCollection();
         $this->contactRequests = new ArrayCollection();
+        $this->favorites = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -316,6 +324,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $contactRequest->setSender(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Hairdresser>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Hairdresser $favorite): static
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Hairdresser $favorite): static
+    {
+        $this->favorites->removeElement($favorite);
 
         return $this;
     }

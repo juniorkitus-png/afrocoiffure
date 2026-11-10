@@ -129,6 +129,12 @@ class Hairdresser
     #[ORM\OneToMany(targetEntity: ContactRequest::class, mappedBy: 'hairdresser', orphanRemoval: true)]
     private Collection $contactRequests;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'favorites')]
+    private Collection $favoritedBy;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -137,6 +143,7 @@ class Hairdresser
         $this->portfolioPhotos = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->contactRequests = new ArrayCollection();
+        $this->favoritedBy = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -499,6 +506,33 @@ class Hairdresser
             if ($contactRequest->getHairdresser() === $this) {
                 $contactRequest->setHairdresser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getFavoritedBy(): Collection
+    {
+        return $this->favoritedBy;
+    }
+
+    public function addFavoritedBy(User $favoritedBy): static
+    {
+        if (!$this->favoritedBy->contains($favoritedBy)) {
+            $this->favoritedBy->add($favoritedBy);
+            $favoritedBy->addFavorite($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritedBy(User $favoritedBy): static
+    {
+        if ($this->favoritedBy->removeElement($favoritedBy)) {
+            $favoritedBy->removeFavorite($this);
         }
 
         return $this;
