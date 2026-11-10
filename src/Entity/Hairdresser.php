@@ -111,11 +111,18 @@ class Hairdresser
     #[ORM\OneToMany(targetEntity: OpeningHours::class, mappedBy: 'hairdresser', orphanRemoval: true)]
     private Collection $openingHours;
 
+    /**
+     * @var Collection<int, PortfolioPhoto>
+     */
+    #[ORM\OneToMany(targetEntity: PortfolioPhoto::class, mappedBy: 'hairdresser', orphanRemoval: true)]
+    private Collection $portfolioPhotos;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->services = new ArrayCollection();
         $this->openingHours = new ArrayCollection();
+        $this->portfolioPhotos = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -387,6 +394,36 @@ class Hairdresser
             // set the owning side to null (unless already changed)
             if ($openingHour->getHairdresser() === $this) {
                 $openingHour->setHairdresser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PortfolioPhoto>
+     */
+    public function getPortfolioPhotos(): Collection
+    {
+        return $this->portfolioPhotos;
+    }
+
+    public function addPortfolioPhoto(PortfolioPhoto $portfolioPhoto): static
+    {
+        if (!$this->portfolioPhotos->contains($portfolioPhoto)) {
+            $this->portfolioPhotos->add($portfolioPhoto);
+            $portfolioPhoto->setHairdresser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePortfolioPhoto(PortfolioPhoto $portfolioPhoto): static
+    {
+        if ($this->portfolioPhotos->removeElement($portfolioPhoto)) {
+            // set the owning side to null (unless already changed)
+            if ($portfolioPhoto->getHairdresser() === $this) {
+                $portfolioPhoto->setHairdresser(null);
             }
         }
 
