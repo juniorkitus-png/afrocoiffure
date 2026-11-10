@@ -117,12 +117,19 @@ class Hairdresser
     #[ORM\OneToMany(targetEntity: PortfolioPhoto::class, mappedBy: 'hairdresser', orphanRemoval: true)]
     private Collection $portfolioPhotos;
 
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'hairdresser', orphanRemoval: true)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->services = new ArrayCollection();
         $this->openingHours = new ArrayCollection();
         $this->portfolioPhotos = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -424,6 +431,36 @@ class Hairdresser
             // set the owning side to null (unless already changed)
             if ($portfolioPhoto->getHairdresser() === $this) {
                 $portfolioPhoto->setHairdresser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setHairdresser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getHairdresser() === $this) {
+                $review->setHairdresser(null);
             }
         }
 
