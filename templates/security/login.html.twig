@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion – Afrocoiffure{% endblock %}
+
+{% block body %}
+<main class="auth">
+    <h1>Connexion</h1>
+
+    {% if error %}
+        <div class="alert alert-error" role="alert">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+        </div>
+    {% endif %}
+
+    {% if app.user %}
+        <p>
+            Vous êtes connecté(e) en tant que {{ app.user.fullName }}.
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        </p>
+    {% else %}
+        <form method="post" action="{{ path('app_login') }}">
+            <div>
+                <label for="username">Adresse e-mail</label>
+                <input type="email" name="_username" id="username" value="{{ last_username }}"
+                       autocomplete="email" required autofocus>
+            </div>
+
+            <div>
+                <label for="password">Mot de passe</label>
+                <input type="password" name="_password" id="password"
+                       autocomplete="current-password" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                   value="{{ csrf_token('authenticate') }}">
+
+            <div>
+                <label>
+                    <input type="checkbox" name="_remember_me"> Rester connecté(e)
+                </label>
+            </div>
+
+            <button type="submit">Se connecter</button>
+        </form>
+    {% endif %}
+</main>
+{% endblock %}

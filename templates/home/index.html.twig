@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Afrocoiffure{% endblock %}
+
+{% block body %}
+<main>
+    <h1>Afrocoiffure</h1>
+
+    {% if app.user %}
+        <p>Bonjour {{ app.user.firstname }} ({{ app.user.roles|join(', ') }})</p>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Se connecter</a>
+    {% endif %}
+</main>
+{% endblock %}
