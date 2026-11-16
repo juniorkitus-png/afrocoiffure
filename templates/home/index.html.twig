@@ -5,11 +5,11 @@
     null = pas encore de photo : un fond décoratif s'affiche à la place.
 #}
 {% set categoryPhotos = {
-    tresses: null,
+    tresses: 'photos/cat-tresses.jpg',
     locks: 'photos/cat-locks.jpg',
-    tissages: null,
+    tissages: 'photos/cat-tissages.jpg',
     coupes: 'photos/cat-coupes.jpg',
-    enfants: null,
+    enfants: 'photos/cat-enfants.jpg',
 } %}
 
 {% block body %}
@@ -51,8 +51,12 @@
             </div>
 
             <div class="hero__media">
-                <img class="hero__img" src="{{ asset('photos/hero.jpg') }}" width="800" height="860"
-                     alt="Une coiffeuse s'occupe des cheveux crépus naturels d'une cliente dans un salon chaleureux">
+                <div class="hero__duo">
+                    <img class="hero__img" src="{{ asset('photos/hero.jpg') }}" width="450" height="675"
+                         alt="Des mains de coiffeuse réalisent des tresses sur des cheveux afro">
+                    <img class="hero__img hero__img--offset" src="{{ asset('photos/cheveux-naturels.jpg') }}" width="450" height="675"
+                         alt="Portrait d'un homme aux cheveux afro bouclés naturels">
+                </div>
                 <div class="hero__badge">
                     <span><strong>{{ stats.hairdressers }}</strong> coiffeurs vérifiés</span>
                 </div>
@@ -155,7 +159,7 @@
                 </ul>
                 <a class="btn btn--light btn--lg" href="{{ path('app_register', {type: 'coiffeur'}) }}">Créer ma fiche coiffeur</a>
             </div>
-            <img class="cta-band__img" src="{{ asset('photos/cat-locks.jpg') }}" alt="" loading="lazy">
+            <img class="cta-band__img" src="{{ asset('photos/outils.jpg') }}" alt="Un barbier et son client souriant dans un barbershop" loading="lazy">
         </div>
     </section>
 
