@@ -15,14 +15,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[UniqueEntity(fields: ['author', 'hairdresser'], errorPath: 'comment', message: 'Vous avez déjà laissé un avis pour ce coiffeur. Vous pouvez le modifier.')]
 class Review
 {
-    // Modération (RM-04, RM-07)
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_APPROVED = 'approved';
-    public const STATUS_REJECTED = 'rejected';
+    // Modération a posteriori (MoSCoW v2, F-29) : l'avis est publié dès son dépôt,
+    // l'administrateur peut ensuite le masquer (par exemple après un signalement, F-17).
+    public const STATUS_PUBLISHED = 'published';
+    public const STATUS_HIDDEN = 'hidden';
     public const STATUSES = [
-        'En attente' => self::STATUS_PENDING,
-        'Approuvé' => self::STATUS_APPROVED,
-        'Rejeté' => self::STATUS_REJECTED,
+        'Publié' => self::STATUS_PUBLISHED,
+        'Masqué' => self::STATUS_HIDDEN,
     ];
 
     #[ORM\Id]
@@ -46,8 +45,8 @@ class Review
     private ?string $comment = null;
 
     #[ORM\Column(length: 20)]
-    #[Assert\Choice(choices: [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED])]
-    private string $status = self::STATUS_PENDING;
+    #[Assert\Choice(choices: [self::STATUS_PUBLISHED, self::STATUS_HIDDEN])]
+    private string $status = self::STATUS_PUBLISHED;
 
     #[ORM\Column]
     private bool $isReported = false;
@@ -91,20 +90,9 @@ class Review
         }
     }
 
-    /**
-     * RM-04 : à appeler dans le contrôleur quand l'AUTEUR modifie son avis
-     * (et non quand l'admin le modère) → l'avis repasse en modération.
-     */
-    public function markAsEdited(): static
+    public function isPublished(): bool
     {
-        $this->status = self::STATUS_PENDING;
-
-        return $this;
-    }
-
-    public function isApproved(): bool
-    {
-        return $this->status === self::STATUS_APPROVED;
+        return $this->status === self::STATUS_PUBLISHED;
     }
 
     public function getStatusLabel(): string
