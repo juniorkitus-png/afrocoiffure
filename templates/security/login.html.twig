@@ -3,45 +3,52 @@
 {% block title %}Connexion – Afrocoiffure{% endblock %}
 
 {% block body %}
-<main class="auth">
+<section class="auth">
     <h1>Connexion</h1>
-
-    {% if error %}
-        <div class="alert alert-error" role="alert">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
-        </div>
-    {% endif %}
+    <p class="auth__intro">Retrouvez vos demandes, vos favoris ou votre espace coiffeur.</p>
 
     {% if app.user %}
-        <p>
-            Vous êtes connecté(e) en tant que {{ app.user.fullName }}.
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
-        </p>
+        <div class="card">
+            <p>Vous êtes connecté(e) en tant que <strong>{{ app.user.fullName }}</strong>.</p>
+            <a class="btn btn--outline" href="{{ path('app_logout') }}">Se déconnecter</a>
+        </div>
     {% else %}
-        <form method="post" action="{{ path('app_login') }}">
-            <div>
-                <label for="username">Adresse e-mail</label>
-                <input type="email" name="_username" id="username" value="{{ last_username }}"
-                       autocomplete="email" required autofocus>
-            </div>
+        <div class="card card--lg">
+            {% if error %}
+                <div class="alert alert-error" role="alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
 
-            <div>
-                <label for="password">Mot de passe</label>
-                <input type="password" name="_password" id="password"
-                       autocomplete="current-password" required>
-            </div>
+            <form method="post" action="{{ path('app_login') }}" data-controller="password-toggle">
+                <div class="field">
+                    <label for="username">Adresse e-mail</label>
+                    <input type="email" name="_username" id="username" value="{{ last_username }}"
+                           autocomplete="email" required autofocus>
+                </div>
 
-            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                   value="{{ csrf_token('authenticate') }}">
+                <div class="field">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" name="_password" id="password" autocomplete="current-password" required
+                           data-password-toggle-target="input">
+                    <button type="button" class="password-toggle" aria-pressed="false"
+                            data-password-toggle-target="button" data-action="password-toggle#toggle">Afficher le mot de passe</button>
+                </div>
 
-            <div>
-                <label>
-                    <input type="checkbox" name="_remember_me"> Rester connecté(e)
-                </label>
-            </div>
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
 
-            <button type="submit">Se connecter</button>
-        </form>
+                <div class="field field--check">
+                    <input type="checkbox" name="_remember_me" id="remember_me">
+                    <label for="remember_me">Rester connecté(e) pendant 7 jours</label>
+                </div>
+
+                <button class="btn btn--primary btn--block btn--lg" type="submit">Me connecter</button>
+            </form>
+        </div>
+
+        <div class="auth__links">
+            <span>Pas encore de compte ? <a href="{{ path('app_register') }}">Créez-le gratuitement</a></span>
+        </div>
     {% endif %}
-</main>
+</section>
 {% endblock %}

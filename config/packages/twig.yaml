@@ -1,5 +1,7 @@
 twig:
     file_name_pattern: '*.twig'
+    # Thème de formulaire Afrocoiffure (templates/form/theme.html.twig)
+    form_themes: ['form/theme.html.twig']
 
 when@test:
     twig:

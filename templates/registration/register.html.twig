@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte – Afrocoiffure{% endblock %}
+
+{% block body %}
+<section class="auth">
+    <h1>Créer un compte</h1>
+    <p class="auth__intro">Gratuit, en moins d'une minute.</p>
+
+    <div class="card card--lg">
+        {{ form_start(registrationForm, {attr: {'data-controller': 'password-toggle'}}) }}
+            {{ form_row(registrationForm.accountType, {row_attr: {class: 'choice-cards'}}) }}
+
+            <div class="grid grid--2" style="gap: 0 1rem">
+                {{ form_row(registrationForm.firstname) }}
+                {{ form_row(registrationForm.lastname) }}
+            </div>
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.phone) }}
+
+            {{ form_row(registrationForm.plainPassword.first, {attr: {autocomplete: 'new-password', 'data-password-toggle-target': 'input'}}) }}
+            {{ form_row(registrationForm.plainPassword.second, {attr: {autocomplete: 'new-password', 'data-password-toggle-target': 'input'}}) }}
+            <p style="margin-top:-.6rem">
+                <button type="button" class="password-toggle" aria-pressed="false"
+                        data-password-toggle-target="button" data-action="password-toggle#toggle">Afficher le mot de passe</button>
+            </p>
+
+            {{ form_row(registrationForm.agreeTerms, {
+                label: "J'accepte que mes données soient traitées conformément à la <a href=\"" ~ path('app_privacy') ~ "\" target=\"_blank\">politique de confidentialité</a> d'Afrocoiffure.",
+                label_html: true,
+            }) }}
+
+            <button class="btn btn--primary btn--block btn--lg" type="submit">Créer mon compte</button>
+        {{ form_end(registrationForm) }}
+    </div>
+
+    <div class="auth__links">
+        <span>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></span>
+    </div>
+</section>
+{% endblock %}

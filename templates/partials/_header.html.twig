@@ -1,0 +1,31 @@
+{% set route = app.request.attributes.get('_route') %}
+<header class="site-header" data-controller="menu" data-action="keydown@window->menu#close">
+    <div class="container site-header__inner">
+        <a class="site-header__logo" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/logo.svg') }}" alt="Afrocoiffure – accueil" width="300" height="70">
+        </a>
+
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu-principal"
+                aria-label="Ouvrir le menu" data-menu-target="button" data-action="menu#toggle">
+            <span class="nav__toggle-bar"></span><span class="nav__toggle-bar"></span><span class="nav__toggle-bar"></span>
+        </button>
+
+        <nav class="nav" id="menu-principal" aria-label="Menu principal" data-menu-target="panel">
+            <ul class="nav__links">
+                <li><a href="{{ path('app_directory') }}" {% if route == 'app_directory' %}aria-current="page"{% endif %}>Trouver un coiffeur</a></li>
+                <li><a href="{{ path('app_directory', {autour: 1}) }}">Autour de moi</a></li>
+                <li><a href="{{ path('app_how') }}" {% if route == 'app_how' %}aria-current="page"{% endif %}>Comment ça marche</a></li>
+            </ul>
+
+            <div class="nav__actions">
+                {% if app.user %}
+                    <span class="nav__user">Bonjour <strong>{{ app.user.firstname }}</strong></span>
+                    <a class="btn btn--outline" href="{{ path('app_logout') }}">Déconnexion</a>
+                {% else %}
+                    <a class="btn btn--ghost" href="{{ path('app_login') }}">Connexion</a>
+                    <a class="btn btn--outline" href="{{ path('app_register', {type: 'coiffeur'}) }}">Proposer mes services</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>

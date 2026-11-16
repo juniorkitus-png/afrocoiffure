@@ -1,0 +1,39 @@
+{#
+    Carte coiffeur. Variables attendues :
+    - hairdresser (Hairdresser)
+    - avgRating (nombre ou null), reviewCount (entier), minPrice (nombre ou null)
+#}
+{% set photo = hairdresser.portfolioPhotos|first %}
+{% set specs = [] %}
+{% for service in hairdresser.services %}
+    {% if service.speciality.name not in specs %}{% set specs = specs|merge([service.speciality.name]) %}{% endif %}
+{% endfor %}
+
+<article class="pro-card">
+    {% if photo %}
+        <img class="pro-card__thumb" src="{{ asset(photo.path) }}" alt="" loading="lazy" width="96" height="96">
+    {% else %}
+        <span class="pro-card__monogram" aria-hidden="true">{{ hairdresser.name|first }}</span>
+    {% endif %}
+
+    <div>
+        <h3 class="pro-card__name">
+            <a href="{{ path('app_hairdresser_show', {slug: hairdresser.slug}) }}">{{ hairdresser.name }}</a>
+        </h3>
+        <p class="pro-card__meta">{{ hairdresser.city }} · {{ hairdresser.workplaceLabel }}</p>
+        <p class="pro-card__specs">{{ specs|slice(0, 3)|join(', ') }}</p>
+
+        <div class="pro-card__footer">
+            {% if minPrice %}
+                <span class="pro-card__price">dès {{ minPrice|number_format(0, ',', ' ') }} €</span>
+            {% endif %}
+            {% if reviewCount > 0 %}
+                <span class="rating" aria-label="Note moyenne {{ avgRating|number_format(1, ',') }} sur 5, {{ reviewCount }} avis">
+                    {{ avgRating|number_format(1, ',') }} <small>({{ reviewCount }})</small>
+                </span>
+            {% else %}
+                <span class="muted">Nouveau</span>
+            {% endif %}
+        </div>
+    </div>
+</article>

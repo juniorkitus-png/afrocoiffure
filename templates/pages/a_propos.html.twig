@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos – Afrocoiffure{% endblock %}
+
+{% block body %}
+    <section class="container page-head">
+        <p class="eyebrow">À propos</p>
+        <h1>La coiffure afro mérite d'être visible.</h1>
+        <p class="lead">Afrocoiffure centralise et rend accessibles les services de coiffure afro en Belgique.</p>
+    </section>
+
+    <div class="container">
+        <img class="banner-img" src="{{ asset('photos/outils.jpg') }}" width="1400" height="533"
+             alt="Ciseaux, rasoir, peigne et brosse de coiffeur posés sur un fond sombre, avec le texte « À chaque coiffure son caractère »">
+    </div>
+
+    <div class="container--narrow prose section">
+        <h2>Pourquoi Afrocoiffure ?</h2>
+        <p>Trouver un coiffeur qui maîtrise les cheveux crépus, frisés ou bouclés reste souvent une affaire de bouche-à-oreille. Beaucoup de coiffeurs afro travaillent en indépendant, à domicile ou en se déplaçant chez leurs clients, et sont peu visibles en ligne.</p>
+        <p>Afrocoiffure rassemble ces professionnels sur une même plateforme pour :</p>
+        <ul>
+            <li><strong>donner plus de visibilité</strong> aux coiffeurs, en salon comme indépendants ;</li>
+            <li><strong>faciliter la recherche</strong> des clients : par ville, par spécialité, par prix et par note ;</li>
+            <li><strong>créer la confiance</strong> grâce aux photos de réalisations et aux avis des clients ;</li>
+            <li><strong>simplifier la prise de contact</strong> avec une demande de rendez-vous en quelques clics.</li>
+        </ul>
+
+        <h2>Des fiches vérifiées</h2>
+        <p>Chaque fiche coiffeur est relue par l'équipe Afrocoiffure avant d'être publiée. Les avis sont publiés directement et peuvent être signalés : les contenus abusifs sont alors retirés.</p>
+
+        <h2>Et demain ?</h2>
+        <p>Cette première version se concentre sur l'essentiel. Plusieurs évolutions sont envisagées :</p>
+        <ul>
+            <li>la réservation en ligne avec un agenda en temps réel ;</li>
+            <li>le paiement en ligne de l'acompte ;</li>
+            <li>une messagerie entre clients et coiffeurs ;</li>
+            <li>une comparaison avancée des prix ;</li>
+            <li>des pages « salon » regroupant plusieurs coiffeurs ;</li>
+            <li>une application mobile.</li>
+        </ul>
+
+        <h2>Un projet académique</h2>
+        <p>Afrocoiffure est réalisé par Junior Kitio Kitio dans le cadre de l'épreuve intégrée du BES Webdeveloper à l'EAFC Namur-Cadets (2026-2027). <strong>Les coiffeurs, clients et avis affichés sont fictifs.</strong></p>
+    </div>
+{% endblock %}

@@ -1,16 +1,170 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Afrocoiffure{% endblock %}
+{#
+    Photos par catégorie (dossier public/photos). Clé = premier mot du slug de la catégorie.
+    null = pas encore de photo : un fond décoratif s'affiche à la place.
+#}
+{% set categoryPhotos = {
+    tresses: null,
+    locks: 'photos/cat-locks.jpg',
+    tissages: null,
+    coupes: 'photos/cat-coupes.jpg',
+    enfants: null,
+} %}
 
 {% block body %}
-<main>
-    <h1>Afrocoiffure</h1>
+    {# ---------- Bandeau principal ---------- #}
+    <section class="hero container" aria-labelledby="hero-title">
+        <div class="hero__card">
+            <div>
+                <p class="eyebrow">Coiffure afro en Belgique</p>
+                <h1 id="hero-title">Vos cheveux méritent <em>les bonnes mains.</em></h1>
+                <p class="lead">Tresses, locks, tissages, coupes : trouvez un coiffeur afro près de chez vous, comparez ses prix et découvrez ses réalisations.</p>
 
-    {% if app.user %}
-        <p>Bonjour {{ app.user.firstname }} ({{ app.user.roles|join(', ') }})</p>
-        <a href="{{ path('app_logout') }}">Se déconnecter</a>
-    {% else %}
-        <a href="{{ path('app_login') }}">Se connecter</a>
+                <form class="search" action="{{ path('app_directory') }}" method="get" role="search">
+                    <div>
+                        <label for="search-specialite">Prestation</label>
+                        <select id="search-specialite" name="specialite">
+                            <option value="">Toutes les prestations</option>
+                            {% for category in categories %}
+                                <optgroup label="{{ category.name }}">
+                                    {% for speciality in category.specialities %}
+                                        <option value="{{ speciality.slug }}">{{ speciality.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="search-ville">Ville ou code postal</label>
+                        <input id="search-ville" name="ville" type="search" placeholder="Ex. Liège, 1050…" list="villes" autocomplete="address-level2">
+                        <datalist id="villes">
+                            {% for city in cities %}<option value="{{ city.city }}">{% endfor %}
+                        </datalist>
+                    </div>
+                    <button class="btn btn--primary" type="submit">Rechercher</button>
+                </form>
+
+                <p class="hero__secondary">
+                    <a class="link-arrow" href="{{ path('app_register', {type: 'coiffeur'}) }}">Vous êtes coiffeur·se ? Proposez vos services</a>
+                </p>
+            </div>
+
+            <div class="hero__media">
+                <img class="hero__img" src="{{ asset('photos/hero.jpg') }}" width="800" height="860"
+                     alt="Une coiffeuse s'occupe des cheveux crépus naturels d'une cliente dans un salon chaleureux">
+                <div class="hero__badge">
+                    <span><strong>{{ stats.hairdressers }}</strong> coiffeurs vérifiés</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- Catégories ---------- #}
+    <section class="section container" aria-labelledby="cat-title">
+        <div class="section__head">
+            <h2 id="cat-title">Quel style recherchez-vous ?</h2>
+            <a class="link-arrow" href="{{ path('app_directory') }}">Voir tous les coiffeurs</a>
+        </div>
+
+        <div class="cat-grid">
+            {% for category in categories %}
+                {% set photo = categoryPhotos[category.slug|split('-')|first] ?? null %}
+                <a class="cat-card" href="{{ path('app_directory', {categorie: category.slug}) }}">
+                    {% if photo %}
+                        <img src="{{ asset(photo) }}" alt="" loading="lazy">
+                    {% else %}
+                        <span class="cat-card__pattern" aria-hidden="true"></span>
+                    {% endif %}
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.specialities|map(s => s.name)|slice(0, 3)|join(' · ') }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# ---------- Coiffeurs à la une ---------- #}
+    {% if featured is not empty %}
+        <section class="section section--tight container" aria-labelledby="featured-title">
+            <div class="section__head">
+                <div>
+                    <p class="eyebrow">Les mieux notés</p>
+                    <h2 id="featured-title">Coiffeurs à la une</h2>
+                </div>
+                <a class="link-arrow" href="{{ path('app_directory') }}">Tout l'annuaire</a>
+            </div>
+
+            <div class="grid grid--3">
+                {% for row in featured %}
+                    {{ include('partials/_hairdresser_card.html.twig', {
+                        hairdresser: row[0],
+                        avgRating: row.avgRating,
+                        reviewCount: row.reviewCount,
+                        minPrice: row.minPrice,
+                    }) }}
+                {% endfor %}
+            </div>
+        </section>
     {% endif %}
-</main>
+
+    {# ---------- Comment ça marche ---------- #}
+    <section class="section container" aria-labelledby="how-title">
+        <div class="section__head">
+            <h2 id="how-title">Comment ça marche ?</h2>
+            <a class="link-arrow" href="{{ path('app_how') }}">En savoir plus</a>
+        </div>
+        <ol class="steps">
+            <li>
+                <h3>Cherchez</h3>
+                <p>Choisissez une prestation et une ville : tresses, locks, tissage, coupe…</p>
+            </li>
+            <li>
+                <h3>Comparez</h3>
+                <p>Consultez les réalisations, les tarifs, les horaires et les avis des clients.</p>
+            </li>
+            <li>
+                <h3>Contactez</h3>
+                <p>Envoyez une demande de rendez-vous : le coiffeur l'accepte depuis son espace.</p>
+            </li>
+        </ol>
+    </section>
+
+    {# ---------- Villes ---------- #}
+    {% if cities is not empty %}
+        <section class="section section--tight container" aria-labelledby="cities-title">
+            <h2 id="cities-title">Coiffeurs afro par ville</h2>
+            <ul class="chips">
+                {% for city in cities %}
+                    <li><a class="chip" href="{{ path('app_directory', {ville: city.city}) }}">{{ city.city }} <small>{{ city.total }}</small></a></li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    {# ---------- Appel aux coiffeurs ---------- #}
+    <section class="section container" aria-labelledby="pro-title">
+        <div class="cta-band">
+            <div class="cta-band__text">
+                <p class="eyebrow" style="color: var(--gold)">Pour les professionnels</p>
+                <h2 id="pro-title">Vous êtes coiffeur·se afro ?</h2>
+                <p>Indépendant, à domicile ou en salon : présentez votre savoir-faire à des clients qui vous cherchent.</p>
+                <ul>
+                    <li>Une fiche gratuite avec vos réalisations</li>
+                    <li>Vos prestations, tarifs et horaires</li>
+                    <li>Les demandes de rendez-vous dans votre espace</li>
+                </ul>
+                <a class="btn btn--light btn--lg" href="{{ path('app_register', {type: 'coiffeur'}) }}">Créer ma fiche coiffeur</a>
+            </div>
+            <img class="cta-band__img" src="{{ asset('photos/cat-locks.jpg') }}" alt="" loading="lazy">
+        </div>
+    </section>
+
+    {# ---------- Chiffres ---------- #}
+    <section class="section section--tight container" aria-label="Afrocoiffure en chiffres">
+        <div class="stats card card--lg">
+            <div><strong>{{ stats.hairdressers }}</strong><span>coiffeurs validés</span></div>
+            <div><strong>{{ stats.cities }}</strong><span>villes en Belgique</span></div>
+            <div><strong>{{ stats.reviews }}</strong><span>avis publiés</span></div>
+        </div>
+    </section>
 {% endblock %}

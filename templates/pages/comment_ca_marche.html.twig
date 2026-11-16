@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comment ça marche – Afrocoiffure{% endblock %}
+
+{% block body %}
+    <section class="container page-head">
+        <p class="eyebrow">Mode d'emploi</p>
+        <h1>Comment ça marche ?</h1>
+        <p class="lead">Que vous cherchiez un coiffeur ou que vous en soyez un, tout se fait en trois étapes.</p>
+    </section>
+
+    <section class="section section--tight container" aria-labelledby="clients-title">
+        <h2 id="clients-title">Vous cherchez un coiffeur</h2>
+        <ol class="steps">
+            <li><h3>Cherchez</h3><p>Filtrez par ville, spécialité, prix, note ou type de lieu (salon, domicile, déplacement).</p></li>
+            <li><h3>Comparez</h3><p>Sur chaque fiche : réalisations en photo, prestations et tarifs, horaires et avis des clients.</p></li>
+            <li><h3>Contactez</h3><p>Envoyez une demande de rendez-vous, avec ou sans compte. Le coiffeur l'accepte ou la refuse.</p></li>
+        </ol>
+        <p class="muted" style="margin-top:1rem">Avec un compte gratuit, vous pouvez aussi laisser un avis, garder vos coiffeurs favoris et suivre vos demandes.</p>
+    </section>
+
+    <section class="section section--tight container" aria-labelledby="pros-title">
+        <h2 id="pros-title">Vous êtes coiffeur·se</h2>
+        <ol class="steps">
+            <li><h3>Créez votre compte</h3><p>Choisissez « Coiffeur / coiffeuse » à l'inscription. C'est gratuit.</p></li>
+            <li><h3>Remplissez votre fiche</h3><p>Présentation, adresse, horaires, prestations et photos. L'équipe la valide avant publication.</p></li>
+            <li><h3>Recevez des demandes</h3><p>Les demandes de rendez-vous arrivent dans votre espace : acceptez-les ou refusez-les.</p></li>
+        </ol>
+        <p style="margin-top:1.5rem"><a class="btn btn--primary" href="{{ path('app_register', {type: 'coiffeur'}) }}">Proposer mes services</a></p>
+    </section>
+
+    <section class="section container--narrow prose" aria-labelledby="faq-title">
+        <h2 id="faq-title">Questions fréquentes</h2>
+        <h3>Est-ce payant ?</h3>
+        <p>Non. La recherche, le compte client et la fiche coiffeur sont gratuits.</p>
+        <h3>Puis-je réserver et payer en ligne ?</h3>
+        <p>Pas encore : vous envoyez une demande, et le coiffeur vous confirme le rendez-vous. La réservation en ligne est prévue pour une prochaine version.</p>
+        <h3>Comment les avis sont-ils contrôlés ?</h3>
+        <p>Seuls les clients connectés peuvent laisser un avis, un seul par coiffeur. Un avis abusif peut être signalé, puis masqué par l'équipe.</p>
+    </section>
+{% endblock %}

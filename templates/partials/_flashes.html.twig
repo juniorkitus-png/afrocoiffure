@@ -1,0 +1,10 @@
+{% set flashes = app.flashes %}
+{% if flashes is not empty %}
+    <div class="container flashes">
+        {% for type, messages in flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}" role="{{ type == 'error' ? 'alert' : 'status' }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

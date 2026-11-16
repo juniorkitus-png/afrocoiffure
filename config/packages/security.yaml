@@ -34,9 +34,10 @@ security:
 
     # Chaque compte a un seul rôle métier (ROLE_CLIENT, ROLE_HAIRDRESSER ou ROLE_ADMIN).
     # ROLE_USER est ajouté automatiquement par User::getRoles().
+    # Attention : l'annuaire public est sous /coiffeurs, l'espace pro sous /espace-coiffeur.
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/coiffeur, roles: ROLE_HAIRDRESSER }
+        - { path: ^/espace-coiffeur, roles: ROLE_HAIRDRESSER }
         - { path: ^/mon-compte, roles: ROLE_USER }
 
 when@test:

@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité – Afrocoiffure{% endblock %}
+
+{% block body %}
+    <section class="container--narrow page-head">
+        <h1>Politique de confidentialité</h1>
+        <p class="lead">Comment Afrocoiffure traite vos données personnelles, conformément au RGPD.</p>
+        <p class="muted">Dernière mise à jour : novembre 2026</p>
+    </section>
+
+    <div class="container--narrow prose">
+        <h2>1. Responsable du traitement</h2>
+        <p>Junior Kitio Kitio, éditeur du site (voir les <a href="{{ path('app_legal') }}">mentions légales</a>). Contact : <a href="mailto:contact@afrocoiffure.test">contact@afrocoiffure.test</a>.</p>
+
+        <h2>2. Données collectées et finalités</h2>
+        <table>
+            <thead><tr><th scope="col">Données</th><th scope="col">Pourquoi</th><th scope="col">Base légale</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>Prénom, nom, e-mail, téléphone (facultatif), mot de passe chiffré</td>
+                    <td>Créer et gérer votre compte</td>
+                    <td>Exécution du service (contrat)</td>
+                </tr>
+                <tr>
+                    <td>Date de votre consentement</td>
+                    <td>Prouver que vous avez accepté cette politique</td>
+                    <td>Obligation légale</td>
+                </tr>
+                <tr>
+                    <td>Fiche coiffeur : nom commercial, adresse, coordonnées GPS, horaires, prestations, photos</td>
+                    <td>Publier la fiche dans l'annuaire</td>
+                    <td>Exécution du service</td>
+                </tr>
+                <tr>
+                    <td>Avis et notes</td>
+                    <td>Informer les autres clients</td>
+                    <td>Consentement (vous choisissez de publier)</td>
+                </tr>
+                <tr>
+                    <td>Demandes de rendez-vous : nom, e-mail, téléphone, message, date souhaitée</td>
+                    <td>Transmettre votre demande au coiffeur choisi</td>
+                    <td>Exécution du service</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. Qui voit vos données ?</h2>
+        <ul>
+            <li>Une demande de rendez-vous est visible <strong>uniquement par le coiffeur concerné</strong> et par l'administrateur.</li>
+            <li>Votre avis est public, avec votre prénom et l'initiale de votre nom.</li>
+            <li>Vos données ne sont <strong>jamais vendues ni transmises</strong> à des fins publicitaires.</li>
+        </ul>
+
+        <h2>4. Durée de conservation</h2>
+        <ul>
+            <li>Compte, avis, favoris : tant que votre compte existe. Ils sont supprimés avec votre compte.</li>
+            <li>Demandes de rendez-vous : tant que la fiche du coiffeur existe. Si vous supprimez votre compte, la demande reste chez le coiffeur sans être liée à votre compte.</li>
+        </ul>
+
+        <h2>5. Cookies</h2>
+        <p>Afrocoiffure utilise uniquement des cookies <strong>strictement nécessaires</strong> : le cookie de session (pour rester connecté pendant votre visite) et, si vous cochez « Rester connecté(e) », un cookie de connexion valable 7 jours. Aucun cookie publicitaire ni de mesure d'audience. Les polices sont hébergées sur nos serveurs : aucun appel à Google Fonts.</p>
+        <p>La carte de l'annuaire utilise les tuiles d'<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> : lorsque la carte s'affiche, votre navigateur contacte leurs serveurs, qui reçoivent votre adresse IP.</p>
+
+        <h2>6. Vos droits</h2>
+        <p>Vous pouvez à tout moment accéder à vos données, les corriger, les supprimer, vous opposer à leur traitement ou demander leur portabilité. La plupart de ces actions sont disponibles directement dans « Mon compte », y compris la suppression complète du compte. Pour toute autre demande : <a href="mailto:contact@afrocoiffure.test">contact@afrocoiffure.test</a>.</p>
+        <p>Vous pouvez aussi introduire une réclamation auprès de l'<a href="https://www.autoriteprotectiondonnees.be">Autorité de protection des données</a> (Belgique).</p>
+
+        <h2>7. Sécurité</h2>
+        <p>Les mots de passe sont chiffrés (hachage), les formulaires sont protégés contre les attaques CSRF et les tentatives de connexion sont limitées à 5 essais par 15 minutes.</p>
+    </div>
+{% endblock %}
